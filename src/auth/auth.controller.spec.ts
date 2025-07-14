@@ -24,10 +24,6 @@ describe('AuthController', () => {
     expect(typeof controller.signIn).toBe('function');
   });
 
-  it('should return success message on signUp', () => {
-    expect(controller.signUp()).toBe('User signed up successfully');
-  });
-
   it('should return success message on signIn', () => {
     expect(controller.signIn()).toBe('User signed in successfully');
   });

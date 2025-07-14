@@ -1,29 +1,35 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { AuthDto } from './dtos';
 
 @Injectable()
 export class AuthService {
   constructor(private prisma: PrismaService) {}
-  async signUp(body: {
-    email: string;
-    password: string;
-    name: string;
-    lastName: string;
-  }) {
-    // Logic for user sign-up can be implemented here
+  async signUp(body: AuthDto) {
+    if (!body?.email || !body?.password) {
+      throw new BadRequestException(
+        'Email and password are required for sign-up',
+      );
+    }
+
     await this.prisma.user.create({
       data: {
-        email: body.email,
-        hash: body.password, // In a real application, ensure to hash the password
-        name: body.name,
-        lastName: body.lastName,
+        email: body?.email,
+        hash: body.password,
+        name: body?.name,
+        lastName: body?.lastName,
       },
     });
+
     return 'User signed up successfully';
   }
 
-  signIn() {
-    // Logic for user sign-in can be implemented here
-    return 'User signed in successfully';
+  async signIn() {
+    const user: any = await this.prisma.user.findUnique({
+      where: {
+        email: 'string',
+      },
+    });
+    return `User signed in successfully: ${JSON.stringify(user)}`;
   }
 }

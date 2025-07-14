@@ -1,5 +1,7 @@
 import { AuthService } from './auth.service';
 import { Body, Controller, Post } from '@nestjs/common';
+import { AuthDto } from './dtos';
+import { ApiBody } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
@@ -8,14 +10,10 @@ export class AuthController {
   }
 
   @Post('sign-up')
+  @ApiBody({ type: AuthDto })
   signUp(
     @Body()
-    body: {
-      email: string;
-      password: string;
-      name: string;
-      lastName: string;
-    },
+    body: AuthDto,
   ) {
     // Logic for user sign-up can be implemented here
     return this.authService.signUp(body);

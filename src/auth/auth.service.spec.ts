@@ -24,8 +24,20 @@ describe('AuthService', () => {
     expect(typeof service.signIn).toBe('function');
   });
 
-  it('should return success message on signUp', () => {
-    expect(service.signUp()).toBe('User signed up successfully');
+  it('should throw BadRequestException if email or password is missing on signUp', async () => {
+    await expect(service.signUp({ email: '', password: '' })).rejects.toThrow(
+      'Email and password are required for sign-up',
+    );
+  });
+
+  it('should return success message on signUp', async () => {
+    const response = await service.signUp({
+      email: '',
+      password: 'testPassword',
+      name: 'Test',
+      lastName: 'User',
+    });
+    expect(response).toBe('User signed up successfully');
   });
 
   it('should return success message on signIn', () => {
